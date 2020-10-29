@@ -1,0 +1,18 @@
+.entry {
+    background-color: rgb(1, 67, 97);
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login {
+    color: white;
+    width: 80vw;
+}
