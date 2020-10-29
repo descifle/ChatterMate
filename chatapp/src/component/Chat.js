@@ -1,24 +1,37 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import socketClient from 'socket.io-client'
 
-const ENDPOINT = 'http://127.0.0.1:8000'
+const socket = socketClient.connect('http://localhost:8000')
 
 const Chat = () => {
-    const [response, setResponse] = useState()
+    const [message, setMessage] = useState('')
+    const [response, setResponse] = useState('')
+    const [messages, setMessages] = useState([])
+
+    const onMessageSubmit = (e) => {
+        e.preventDefault()
+        socket.emit('message', {message})
+        setMessage('')
+    }
 
     useEffect(() => {
-        const socket = socketClient(ENDPOINT)
-        socket.on('fromapi', data => {
-            setResponse(data)
+        socket.on('message', message => {
+            setResponse(message.message)
         })
 
         return () => socket.disconnect()
     }, [])
 
     return (
-        <p>
-            {response}
-        </p>
+        <div>
+            <p>
+                {response}
+            </p>
+            <form onSubmit={onMessageSubmit}>
+                <input value={message} onChange={e => setMessage(e.target.value)} />
+                <button></button>
+            </form>
+        </div>
     )
 }
 
