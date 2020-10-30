@@ -6,6 +6,7 @@ const io = require('socket.io')(http)
 const cors = require('cors')
 const path = require('path')
 const bodyParser = require('body-parser')
+const db = require('./models')
 
 //port static or dynamic
 const port = process.env.PORT || 8000;

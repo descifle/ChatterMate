@@ -14,9 +14,14 @@ const Login = () => {
       
     }
 
+    const renderUser = user.length > 0 ? `Welcome ${user}` : "No info"
+
     return (
         <div className="entry">
             <h1>ChatterMate</h1>
+            <div>
+                <h3>{renderUser}</h3>
+            </div>
             <form onSubmit={validateSumbit} className="login">
                     <div className="form-group">
                         <label >Username</label>
