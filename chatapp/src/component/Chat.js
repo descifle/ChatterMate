@@ -5,8 +5,15 @@ const socket = socketClient.connect('http://localhost:8000')
 
 const Chat = () => {
     const [message, setMessage] = useState('')
-    const [response, setResponse] = useState('')
-    const [messages, setMessages] = useState([])
+    const [chat, setChat] = useState([])
+
+    useEffect(() => {
+        socket.on('message', data => {
+            setChat(chat => [...chat, data])
+        })
+
+        return () => socket.disconnect()
+    }, [])
 
     const onMessageSubmit = (e) => {
         e.preventDefault()
@@ -14,18 +21,14 @@ const Chat = () => {
         setMessage('')
     }
 
-    useEffect(() => {
-        socket.on('message', message => {
-            setResponse(message.message)
-        })
-
-        return () => socket.disconnect()
-    }, [])
+    const renderMessages = chat.map((item, index) => {
+    return <p>hi {item.message}</p> 
+    })
 
     return (
         <div>
             <p>
-                {response}
+                {renderMessages}
             </p>
             <form onSubmit={onMessageSubmit}>
                 <input value={message} onChange={e => setMessage(e.target.value)} />

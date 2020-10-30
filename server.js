@@ -29,8 +29,11 @@ if(process.env.NODE_ENV === 'production') {
         res.sendFile(path.join(__dirname, "/index.html"));
     });
 
-    io.on('connection', (socket) => {
-        console.log('a user connected')
+    io.on('connect', (socket) => {
+        socket.on('message', message => {
+            io.emit('message', message)
+            console.log(message)
+        })
     })
 }
 
