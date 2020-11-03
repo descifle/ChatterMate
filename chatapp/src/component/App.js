@@ -4,10 +4,11 @@ import Chat from './Chat'
 
 const App = () => {
     return (
-        <div className="container">
-           {/* <Chat /> */}
-           <Login />
+        <div className="">
+           <Chat />
+           {/* <Login /> */}
         </div>
+       
     )
 }
 
