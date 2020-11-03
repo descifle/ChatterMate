@@ -6,7 +6,6 @@ const io = require('socket.io')(http)
 const cors = require('cors')
 const path = require('path')
 const bodyParser = require('body-parser')
-const db = require('./models')
 
 //port static or dynamic
 const port = process.env.PORT || 8000;
@@ -15,6 +14,13 @@ const port = process.env.PORT || 8000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}))
+
+// database info
+const db = require('./models')
+
+// express router setup
+const usersRouter = require('./routes/users')
+app.use('/users', usersRouter)
 
 // serve client build when deployed to production else serve up base
 if(process.env.NODE_ENV === 'production') {
@@ -38,6 +44,8 @@ if(process.env.NODE_ENV === 'production') {
     })
 }
 
-http.listen(port, () => {
-    console.log(`Server is running on port ${port}`)
+db.sequelize.sync().then((req) => {
+    http.listen(port, () => {
+        console.log(`Server is running on port ${port}`)
+    })
 })
