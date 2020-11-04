@@ -7,8 +7,8 @@
 
 .messages {
     height: 95%;
-    width: 80%;
-    padding: 2rem 4rem;
+    width: 100%;
+    padding: 1rem;
     background-color: white;
     overflow-y: scroll;
 
@@ -40,6 +40,11 @@
   color: white;
   width: 15rem;
   margin: 2rem 0;
+  word-wrap: break-word;
+}
+
+.chatitself {
+  height: 5%;
 }
 
 .chat-box {
@@ -48,19 +53,77 @@
     width: 80%;
     height: 5%;
 
-    .form-group {
-      height: 100%;
-  }
+        .form-group {
+          height: 100%;
+      }
+      
+      .form-control {
+          display: inline-block;
+          width: 60%;
+          height: 100%;
+      }
+
+}
+
+.send-btn {
+    // // height: 100%;
+    // // width:20%;
+    // vertical-align: auto;
+    border: none;
+    color: #00a4b4;
+    background-color: white;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    
+
+    &:hover {
+      color: black;
+      background-color: #455a64;
+      border-color: #1d2124;
+    }
+
+    &:focus {
+      outline-color: white;
+    }
+
+}
+
+.chat-bar {
+  border-top: 1px solid black;
+}
+
+.write-message {
+  border:none;
+  border-width: 0;
   
-  .form-control {
-      display: inline-block;
-      width: 80%;
-      height: 100%;
+  &:hover {
+    
   }
 
-  .btn {
-    height: 100%;
-    width:20%;
-    vertical-align: auto;
+  &:focus {
+    outline-color:transparent;
   }
+}
+
+@media (min-width: 30rem) {
+    .messages {
+      
+    }
+    
+    .messages {
+      width: 75%;
+      padding: 2rem 4rem;
+      background-color: white;
+      overflow-y: scroll;
+    }
 }

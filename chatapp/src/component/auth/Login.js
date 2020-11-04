@@ -1,20 +1,35 @@
 import React, {useState} from 'react'
+import axios from 'axios'
 import './login.scss'
 
-const Login = () => {
-    const [user, setUser] = useState('')
+const Login = ({setUser}) => {
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
-    const validateSumbit = (e) => {
+    const validateSubmit = (e) => {
         e.preventDefault()
 
-        if(user && password) {
+        if(username && password) {
             console.log('this is me')
+
+            setUser(username)
+
+            // axios({
+            //     method: 'POST',
+            //     data: {
+            //         username: username,
+            //         password: password,
+            //     },
+            //     withCredentials: true,
+            //     url: '/users/create',
+            // })
+            // .then(res => console.log(res))
+            // .catch(err => console.log(err))
         }
       
     }
 
-    const renderUser = user.length > 0 ? `Welcome ${user}` : "No info"
+    const renderUser = username.length > 0 ? `Welcome ${username}` : "No info"
 
     return (
         <div className="entry">
@@ -22,10 +37,10 @@ const Login = () => {
             <div>
                 <h3>{renderUser}</h3>
             </div>
-            <form onSubmit={validateSumbit} className="login">
+            <form onSubmit={validateSubmit} className="login">
                     <div className="form-group">
                         <label >Username</label>
-                        <input type="text" value={user} onChange={e => setUser(e.target.value)} className="form-control" />
+                        <input type="text" value={username} onChange={e => setUsername(e.target.value)} className="form-control" />
                     </div>
                     <div className="form-group">
                         <label >Password</label>

@@ -1,0 +1,11 @@
+allow registering account DONE
+
+hash password and clear / sanitize input/output
+
+allow spaces maybe maybe not
+
+when logging in create load screen
+
+put up welcome {username}
+
+enter chatroom

@@ -1,14 +1,9 @@
 import React from 'react';
-import Login from './auth/Login'
-import Chat from './Chat'
+import Room from './Room'
 
 const App = () => {
     return (
-        <div className="">
-           <Chat />
-           {/* <Login /> */}
-        </div>
-       
+        <Room />
     )
 }
 
