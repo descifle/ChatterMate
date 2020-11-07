@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import socketClient from 'socket.io-client'
 import moment from 'moment'
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import { Box } from '@material-ui/core'
 import './chat.scss'
 
 const socket = socketClient.connect('http://localhost:3001')
@@ -45,42 +52,41 @@ const Chat = ({ user }) => {
     }
 
     const renderMessages = chat.map((item, index) => {
-        return <div key={index} className="message">
-            <span className={user === item.fullMsg.username ? "text-primary" : "text-white"}>{item.fullMsg.username}</span> 
-            <p>{item.fullMsg.message}</p>
-            <div>{item.fullMsg.time}</div>
-        </div>
+        return <div key={index} className={user === item.fullMsg.username ? "message" : "other-message"}>
+                    <span className={user === item.fullMsg.username ? "text-primary" : "text-white"}>{item.fullMsg.username}</span>
+                    <p>{item.fullMsg.message}</p>
+                    <div>{item.fullMsg.time}</div>
+                </div>
     })
 
     return (
         <div className="chat-container container-fluid">
-        <div className="row h-100">
-            <div className="messages col-9">
-                <div className="chat-header">chattermate instant messaging | {user}</div>
-                <div className="message-container">
-                    {renderMessages}
-                </div>
-            </div>
-            <div className="col-md-3">
-                some text
-            </div>
-            <form className="col-12 chatitself" onSubmit={onMessageSubmit}>
-                <div className="chat-bar row h-100">
-                    {/* <span className="col-3">{user}</span> */}
-                    <input className="write-message col-9" value={message} onChange={e => setMessage(e.target.value)} />
-                    <button className="col-3 send-btn">Send</button>
-                </div>
-            </form>
-            {/* <form className="chat-box" onSubmit={onMessageSubmit}>
-                    <div className="form-group">
-                    <span>{user}</span>
-                    <input className="form-control" value={message} onChange={e => setMessage(e.target.value)} />
-                    <button className="btn btn-dark">send</button>
+            <div className="row h-100">
+                <div className="messages col-9">
+                    <AppBar position="static">
+                        <Toolbar>
+                        <Typography variant="h6" >
+                           ChatterMate Instant Messaging
+                        </Typography>
+                            <Button className="ml-auto" color="inherit">{user}</Button>
+                        </Toolbar>
+                    </AppBar>
+                    <div className="message-container">
+                        {renderMessages}
                     </div>
-                </form> */}
+                    <form className="chatitself" onSubmit={onMessageSubmit}>
+                        <div className="chat-bar">
+                            <input className="write-message" value={message} onChange={e => setMessage(e.target.value)} />
+                            <button className="send-btn">Send</button>
+                        </div>
+                    </form>
+                </div>
+                <div className="col-3">
+                    <Box />
+                </div>
+            </div>
         </div>
-    </div>
-    
+
     )
 }
 
