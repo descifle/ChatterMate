@@ -1,30 +1,64 @@
 import React, { useState, useEffect } from 'react'
 import socketClient from 'socket.io-client'
 import moment from 'moment'
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import axios from 'axios'
 import { Box } from '@material-ui/core'
 import './chat.scss'
 
-const socket = socketClient.connect('http://localhost:3001')
+const socket = socketClient('http://localhost:3001')
 
 const Chat = ({ user }) => {
     const [message, setMessage] = useState('')
+    const [users, setUsers] = useState([])
     const [chat, setChat] = useState([])
 
     const date = moment().format('h:mm')
 
     useEffect(() => {
+
+        socket.on('connection', () => {
+            
+            console.log(`${user} connected`)
+        })
+
+        // saving the data from server into chat array
         socket.on('message', data => {
             setChat(chat => [...chat, data])
         })
 
-        return () => socket.disconnect()
+        // shows all connected visitors from server
+        socket.on('visitors', (data) => {
+            setUsers(data)
+        })
+
+        return () => {
+            socket.disconnect()
+            console.log('disconnected')
+        }
     }, [])
+
+    useEffect(() => {
+
+        socket.emit('loggedUser', { user })
+
+    }, []) 
+
+    // useEffect(() => {
+
+    //     const loginCheck = setInterval(() => {
+    //         socket.emit('loggedUser', { user })
+    //     }, 2000)
+
+    //     return () => {
+    //         clearInterval(loginCheck)  
+    //         socket.disconnect()
+    //     }      
+
+    // }, []) 
 
     const validateText = (text) => {
         let validText = false
@@ -42,16 +76,39 @@ const Chat = ({ user }) => {
                 time: date
             }
 
+            axios({
+                method: 'POST',
+                data: fullMsg,
+                url: '/chat/message'
+            })
+
             socket.emit('message', { fullMsg })
             setMessage('')
         } else {
             return
         }
 
+        
+        // console.log(document.querySelector('.message-container'))
+
         console.log(chat)
     }
 
+    const renderUsers = users.map((user, index) => {
+
+        return <div key={index}>
+                    {user.user}
+               </div>
+    })
     const renderMessages = chat.map((item, index) => {
+
+
+        setTimeout(() => {
+            const msgContainer = document.querySelector('.message-container')
+            let scrollHeight = msgContainer.scrollHeight
+            msgContainer.scroll(0,scrollHeight)
+        }, 200)
+
         return <div key={index} className={user === item.fullMsg.username ? "message" : "other-message"}>
                     <span className={user === item.fullMsg.username ? "text-primary" : "text-white"}>{item.fullMsg.username}</span>
                     <p>{item.fullMsg.message}</p>
@@ -83,6 +140,7 @@ const Chat = ({ user }) => {
                 </div>
                 <div className="col-3">
                     <Box />
+                    {renderUsers}
                 </div>
             </div>
         </div>

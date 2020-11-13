@@ -8,7 +8,7 @@ const Room = () => {
     const renderPage = user ? <Chat user={user} /> : <Login setUser={setUser} />
 
     return (
-        <div className="">
+        <div className="kekw">
            {renderPage}
         </div>
        

@@ -1,13 +1,19 @@
 module.exports = (sequelize, datatypes) => {
-    const User = sequelize.define('User', {
-        userName: {
+    const Chat = sequelize.define('Chat', {
+        comment_id: {
+            type: datatypes.INTEGER,
+            primaryKey: true,
+            allowNull: false,
+            autoIncrement: true,
+        },
+        commenter: {
             type: datatypes.STRING,
             allowNull: false,
             validate: {
                 notEmpty: true
             }
         },
-        password: {
+        comment: {
             type: datatypes.STRING,
             allowNull: false,
             validate: {
@@ -16,5 +22,5 @@ module.exports = (sequelize, datatypes) => {
         }
     })
 
-    return User
+    return Chat
 }

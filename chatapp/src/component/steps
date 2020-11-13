@@ -9,3 +9,5 @@ when logging in create load screen
 put up welcome {username}
 
 enter chatroom
+
+setup a heartbeat so that user names show up on right side

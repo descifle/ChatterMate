@@ -8,12 +8,26 @@ router.route('/results').get((req ,res) => {
     }).catch(err => console.log(err))
 })
 
-router.route('/insert').get((req ,res) => {
-    res.send('success')
-    User.create({
-        firstName: 'kiddy',
-        age: 19,
-    }).catch(err => console.log(err))
+router.route('/create').post((req ,res) => {
+    
+    console.log(req.body.username)
+    // res.send('success')
+    User.findOne({ where: {userName: req.body.username}}).then((user) => {
+        console.log(user)
+        if(user === null) {
+            User.create({
+                userName: req.body.username,
+                password: req.body.password,
+            }).then(() => {
+                res.send('All done')
+            }).catch(err => console.log(err))
+        } else {
+            res.send('That user already exists')
+        }
+    })
+    
+
+    
 })
 
 router.route('/delete').get((req ,res) => {

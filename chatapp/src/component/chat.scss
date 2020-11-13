@@ -8,13 +8,15 @@
 .messages {
     position: relative;
     height: 100%;
+    padding: 0;
     // width: 100%;
-    background-color: white;
+    background-color: rgb(199, 199, 199);
 }
 
 .message-container {
   margin-top: 1.5rem;
   height: 85%;
+  background-color: white;
   overflow-y: scroll;
 
     &::-webkit-scrollbar {
@@ -42,18 +44,20 @@
 .message {
   background-color: blue;
   padding: 2rem 2rem;
+  border-radius: 3rem;
   color: white;
   width: 15rem;
-  margin: 2rem 0;
+  margin: 2rem auto;
   word-wrap: break-word;
 }
 
 .other-message {
   background-color: rgb(190, 190, 190);
   padding: 2rem 2rem;
+  border-radius: 3rem;
   color: black;
   width: 15rem;
-  margin-left: auto;
+  margin: 2rem auto;
   word-wrap: break-word;
 }
 
@@ -120,6 +124,13 @@
     .messages {
       padding: 2rem;
       width: 75%;
-      background-color: white;
+    }
+
+    .message {
+      margin-left: 2rem;
+    }
+    
+    .other-message {
+      margin-right: 2rem;
     }
 }
