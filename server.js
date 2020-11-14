@@ -39,34 +39,39 @@ if(process.env.NODE_ENV === 'production') {
     });
 
     const getVisitors = () => {
+
+        // checks for all connected clients then creates an array of from clients variable. Then creates an array of users from mapping over each socket returning socket.user 
+
         let clients = io.sockets.clients().connected
         let sockets = Object.values(clients)
         let users = sockets.map(socket => socket.user)
+        console.log(users)
         return users
     }
 
     const emitVisitors = () => {
+        // sends all visitors info over sockets
         io.emit('visitors', getVisitors())
     }
 
     io.on('connection', (socket) => {
         console.log('a client connected')
 
-        socket.emit('connection', null)
-
         socket.on('loggedUser', user => {
-            // console.log(user)
+
             socket.user = user
             emitVisitors()
         })
 
         socket.on('message', message => {
             io.emit('message', message)
-            // console.log(message)
         })
 
         socket.on('disconnect', () => {
-            console.log('user disconnected')
+            //attempted disconnect of socket that leaves
+            console.log('a user disconnected')
+            socket.disconnect()
+            emitVisitors() 
         })
     })
 }

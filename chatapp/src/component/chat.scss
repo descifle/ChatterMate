@@ -119,6 +119,11 @@
 
 }
 
+.col-3 {
+  display: flex;
+  justify-content: center;
+}
+
 @media (min-width: 30rem) {
     
     .messages {

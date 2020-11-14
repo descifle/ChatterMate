@@ -6,7 +6,6 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import axios from 'axios'
-import { Box } from '@material-ui/core'
 import './chat.scss'
 
 const socket = socketClient('http://localhost:3001')
@@ -94,12 +93,22 @@ const Chat = ({ user }) => {
         console.log(chat)
     }
 
-    const renderUsers = users.map((user, index) => {
+    const renderUsers = () => {
 
-        return <div key={index}>
-                    {user.user}
-               </div>
-    })
+        if (users !== null) {
+            return users.map((user, index) => {
+
+                return <Button key={index}>
+                            {user.user}
+                       </Button>
+            })
+        } else {
+            return <div>
+                empty
+            </div>
+        }
+    }
+
     const renderMessages = chat.map((item, index) => {
 
 
@@ -139,8 +148,9 @@ const Chat = ({ user }) => {
                     </form>
                 </div>
                 <div className="col-3">
-                    <Box />
-                    {renderUsers}
+                    <div>
+                    {renderUsers()}
+                    </div>
                 </div>
             </div>
         </div>
