@@ -7,11 +7,19 @@ module.exports = (sequelize, datatypes) => {
                 notEmpty: true
             }
         },
+        googleId: {
+            type: datatypes.STRING,
+            allowNull: true,
+            validate: {
+                notEmpty: false
+            }
+
+        },
         password: {
             type: datatypes.STRING,
-            allowNull: false,
+            allowNull: true,
             validate: {
-                notEmpty: true
+                notEmpty: false
             }
         }
     })

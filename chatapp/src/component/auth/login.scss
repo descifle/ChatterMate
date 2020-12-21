@@ -10,9 +10,84 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+
+    h1 {
+        color: white;
+    }
 }
 
 .login {
+    font-size: 1.2rem;
     color: white;
     width: 80vw;
+}
+
+.username {
+    height: 4rem;
+    font-size: 1.3rem;
+    border-radius: 10rem;
+    padding: 0 2rem;
+}
+
+.form-group {
+    transition: transform .2s;
+}
+
+.form-group:focus-within {
+    transform: scale(1.02,1.02);
+}   
+
+.form-control:focus {
+    .user-label {
+        transform: none;
+    }
+}
+
+// .form-control:focus + .user-label {
+//     transform: translateY(3.3rem) translateX(3rem);
+// }
+
+.user-label {
+    opacity: 1;
+    color:black;
+    font-weight: bold;
+    transform: translateY(3.3rem) translateX(3rem);
+    transform-origin: 0 0;
+    transition: all .3s;
+}
+
+.btn-join {
+    display: block;
+    padding: .75rem 6rem;
+    border-radius: 1rem;
+    margin: auto;
+}
+
+.btn-user {
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 10rem;
+    padding: .75rem 1rem;
+    color: #fff;
+    background-color: #ea4335;
+    border-color: #fff;
+}
+
+.divide-container {
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    color: gray;
+}
+
+.short-divide {
+    width: 30%;
+    display: inline-block;
+    border-top: 1px solid gray;
+}
+
+@media (min-width: 40rem) {
+    .login {
+        width: 40rem;
+    }
 }

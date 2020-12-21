@@ -6,6 +6,9 @@ const io = require('socket.io')(http)
 const cors = require('cors')
 const path = require('path')
 const bodyParser = require('body-parser')
+const cookieSession = require('cookie-session')
+const passport = require('passport')
+require('./passport-config')
 
 //port static or dynamic
 const port = process.env.PORT || 3001;
@@ -14,6 +17,16 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}))
+
+// cookie setup
+app.use(cookieSession({
+    name: 'my-session',
+    keys: ['key1', 'key2']
+}))
+
+// passport initiliaze
+app.use(passport.initialize())
+app.use(passport.session())
 
 // database info
 const db = require('./models')
@@ -34,9 +47,11 @@ if(process.env.NODE_ENV === 'production') {
         res.sendFile(path.join(__dirname, "chatapp", "build", "index.html"));
     });
 } else {
-    app.get("/", (req, res) => {
-        res.sendFile(path.join(__dirname, "/index.html"));
-    });
+    // app.get("/", (req, res) => {
+    //     res.sendFile(path.join(__dirname, "/index.html"));
+       
+    // });
+    app.use(express.static(path.join(__dirname, 'chatapp/build')));
 
     const getVisitors = () => {
 
@@ -45,7 +60,6 @@ if(process.env.NODE_ENV === 'production') {
         let clients = io.sockets.clients().connected
         let sockets = Object.values(clients)
         let users = sockets.map(socket => socket.user)
-        console.log(users)
         return users
     }
 
@@ -54,7 +68,7 @@ if(process.env.NODE_ENV === 'production') {
         io.emit('visitors', getVisitors())
     }
 
-    io.on('connection', (socket) => {
+    io.on('connection', function (socket) {
         console.log('a client connected')
 
         socket.on('loggedUser', user => {
@@ -70,7 +84,6 @@ if(process.env.NODE_ENV === 'production') {
         socket.on('disconnect', () => {
             //attempted disconnect of socket that leaves
             console.log('a user disconnected')
-            socket.disconnect()
             emitVisitors() 
         })
     })

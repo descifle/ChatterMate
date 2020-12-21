@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import socketClient from 'socket.io-client'
 import moment from 'moment'
+import Popover from './Popover'
+import ListItem from '@material-ui/core/ListItem';
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 import axios from 'axios'
 import './chat.scss'
 
@@ -14,15 +15,20 @@ const Chat = ({ user }) => {
     const [message, setMessage] = useState('')
     const [users, setUsers] = useState([])
     const [chat, setChat] = useState([])
+    const [isDesktop, setIsDesktop] = useState(window.innerWidth > 500)
 
     const date = moment().format('h:mm')
 
+    const updateMedia = () => {
+        setIsDesktop(window.innerWidth > 500);
+    }
+
     useEffect(() => {
 
-        socket.on('connection', () => {
-            
-            console.log(`${user} connected`)
-        })
+        // socket.on('connection', () => {
+
+        //     console.log(`${user} connected`)
+        // })
 
         // saving the data from server into chat array
         socket.on('message', data => {
@@ -44,20 +50,12 @@ const Chat = ({ user }) => {
 
         socket.emit('loggedUser', { user })
 
-    }, []) 
+    }, [user])
 
-    // useEffect(() => {
-
-    //     const loginCheck = setInterval(() => {
-    //         socket.emit('loggedUser', { user })
-    //     }, 2000)
-
-    //     return () => {
-    //         clearInterval(loginCheck)  
-    //         socket.disconnect()
-    //     }      
-
-    // }, []) 
+    useEffect(() => {
+        window.addEventListener("resize", updateMedia);
+        return () => window.removeEventListener("resize", updateMedia);
+    });
 
     const validateText = (text) => {
         let validText = false
@@ -86,11 +84,6 @@ const Chat = ({ user }) => {
         } else {
             return
         }
-
-        
-        // console.log(document.querySelector('.message-container'))
-
-        console.log(chat)
     }
 
     const renderUsers = () => {
@@ -98,9 +91,14 @@ const Chat = ({ user }) => {
         if (users !== null) {
             return users.map((user, index) => {
 
-                return <Button key={index}>
-                            {user.user}
-                       </Button>
+                return (
+                    // <Button className="message-username" key={index}>
+                    //     {user.user}
+                    // </Button>
+                    <ListItem className="message-username" button key={index}>
+                        {user.user}
+                    </ListItem>
+                )
             })
         } else {
             return <div>
@@ -111,45 +109,49 @@ const Chat = ({ user }) => {
 
     const renderMessages = chat.map((item, index) => {
 
-
         setTimeout(() => {
             const msgContainer = document.querySelector('.message-container')
             let scrollHeight = msgContainer.scrollHeight
-            msgContainer.scroll(0,scrollHeight)
+            msgContainer.scroll(0, scrollHeight)
         }, 200)
 
-        return <div key={index} className={user === item.fullMsg.username ? "message" : "other-message"}>
-                    <span className={user === item.fullMsg.username ? "text-primary" : "text-white"}>{item.fullMsg.username}</span>
-                    <p>{item.fullMsg.message}</p>
-                    <div>{item.fullMsg.time}</div>
+        return (
+            <div key={index} className={user === item.fullMsg.username ? "message" : "other-message"}>
+                <div>
+                    <span className={user === item.fullMsg.username ? "message-username" : "message-username text-dark"}>{item.fullMsg.username}</span>
+                    <span className={user === item.fullMsg.username ? "message-time" : "message-time text-dark"}>{item.fullMsg.time}</span>
                 </div>
+                <p class={user === item.fullMsg.username ? "" : "text-dark"}>{item.fullMsg.message}</p>
+
+            </div>
+        )
     })
 
     return (
         <div className="chat-container container-fluid">
             <div className="row h-100">
-                <div className="messages col-9">
+                <div className="col-md-3 text-center">
                     <AppBar position="static">
                         <Toolbar>
-                        <Typography variant="h6" >
-                           ChatterMate Instant Messaging
+                            <Typography variant="h6" >
+                                ChatterMate Instant Messaging
                         </Typography>
-                            <Button className="ml-auto" color="inherit">{user}</Button>
+                            {/* <Button className="ml-auto" color="inherit">{user}</Button> */}
                         </Toolbar>
                     </AppBar>
+                    {isDesktop ? <div className="text-center bg-light">{renderUsers()}</div> : <Popover user={user} users={users} />}
+                </div>
+                <div className="messages col-md-9">
                     <div className="message-container">
                         {renderMessages}
                     </div>
-                    <form className="chatitself" onSubmit={onMessageSubmit}>
-                        <div className="chat-bar">
-                            <input className="write-message" value={message} onChange={e => setMessage(e.target.value)} />
-                            <button className="send-btn">Send</button>
-                        </div>
-                    </form>
-                </div>
-                <div className="col-3">
-                    <div>
-                    {renderUsers()}
+                    <div className="chatitself">
+                        <form onSubmit={onMessageSubmit}>
+                            <div className="chat-bar">
+                                <input autoFocus className="write-message" value={message} onChange={e => setMessage(e.target.value)} placeholder="type here to message..." />
+                                <button className="send-btn"><i class="fa fa-paper-plane"></i></button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
