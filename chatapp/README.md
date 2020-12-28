@@ -1,3 +1,7 @@
+# Chat application
+
+An application that allows multiple users to chat amongst themselves.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
